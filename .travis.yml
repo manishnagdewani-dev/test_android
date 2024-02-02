@@ -34,9 +34,6 @@ before_install:
   - unzip -q android-commandline-tools-linux.zip -d ${ANDROID_HOME}/cmdline-tools
   - mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
 
-before_script:
-  - echo y | ${TOOLS}/bin/sdkmanager "platform-tools" >/dev/null
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -47,7 +44,8 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
-script: true
+script:
+  - ./gradlew connectedAndroidTest --parallel
 
 git:
   quiet: true
