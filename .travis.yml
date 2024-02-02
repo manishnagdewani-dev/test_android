@@ -1,0 +1,53 @@
+dist: jammy
+language: android
+jdk: openjdk17 
+
+env:
+  global:
+    - BUILD_API=33
+    - BUILD_TOOLS=33.0.0
+    - ANDROID_HOME=/usr/local/android-sdk
+    - TOOLS=${ANDROID_HOME}/cmdline-tools/latest
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-$BUILD_TOOLS
+    - android-$BUILD_API
+    - extra-android-m2repository
+
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+
+before_install:
+  # workaround openjdk11
+  #  - sudo apt-get update
+  #  - sudo apt install openjdk-11-jdk
+  #  - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+  #  - export PATH=$JAVA_HOME/bin:$PATH
+  # end workaround
+
+  # Install cmdline-tools (older tools don't support Java 11)
+  - wget -q "https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip" -O android-commandline-tools-linux.zip
+  - unzip -q android-commandline-tools-linux.zip -d ${ANDROID_HOME}/cmdline-tools
+  - mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
+
+before_script:
+  - echo y | ${TOOLS}/bin/sdkmanager "platform-tools" >/dev/null
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+git:
+  quiet: true
+  submodules: false
