@@ -1,6 +1,5 @@
-dist: jammy
 language: android
-jdk: openjdk17 
+jdk: openjdk18 
 
 env:
   global:
@@ -47,6 +46,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+
+script: true
 
 git:
   quiet: true
